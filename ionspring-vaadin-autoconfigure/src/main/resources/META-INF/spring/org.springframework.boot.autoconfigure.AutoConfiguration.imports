@@ -1,0 +1,4 @@
+org.ionspring.vaadin.autoconfigure.SecurityAutoconfiguration
+org.ionspring.vaadin.autoconfigure.LoginAutoconfiguration
+org.ionspring.vaadin.autoconfigure.I18nAutoconfiguration
+org.ionspring.vaadin.autoconfigure.KotlinAutoconfiguration
