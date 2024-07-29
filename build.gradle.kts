@@ -43,6 +43,7 @@ subprojects {
     java.sourceCompatibility = JavaVersion.VERSION_17
 
     group = rootProject.group
+    version = rootProject.version
 
     repositories {
         mavenCentral()
