@@ -20,6 +20,6 @@ plugins {
 
 dependencies {
     api(project(":ionspring-as400-autoconfigure"))
-    api(project(":ionspring-kotlin"))
+    api(project(":ionspring-vaadin-autoconfigure"))
     api("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
 }

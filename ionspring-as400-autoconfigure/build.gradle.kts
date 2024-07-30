@@ -16,6 +16,7 @@
 
 plugins {
 	id("java-library")
+	kotlin("jvm") version "1.9.24"
 }
 
 repositories {
@@ -27,6 +28,7 @@ dependencies {
 	compileOnly("org.springframework.boot:spring-boot-autoconfigure:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-starter-security:${project.extra["springBootVersion"]}")
 	compileOnly("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
+	compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
 	testImplementation("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:${project.extra["springBootVersion"]}")
 }

@@ -17,6 +17,5 @@
 
 rootProject.name = "ionspring"
 include("ionspring-as400-autoconfigure")
-include("ionspring-kotlin")
 include("ionspring-vaadin-autoconfigure")
 include("ionspring-starter")
