@@ -27,6 +27,7 @@ import com.vaadin.flow.server.auth.AnonymousAllowed
 import com.vaadin.flow.spring.security.AuthenticationContext
 import jakarta.annotation.security.PermitAll
 import jakarta.annotation.security.RolesAllowed
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Lazy
@@ -43,12 +44,15 @@ private fun getRouteTitle(routeClass: KClass<*>): String {
 open class SideNavUtils : ApplicationListener<ContextRefreshedEvent> {
 
     override fun onApplicationEvent(event: ContextRefreshedEvent) {
-        authenticationContext =
+        authenticationContext = try {
             event.applicationContext.getBean(AuthenticationContext::class.java) as AuthenticationContext
+        } catch (_: NoSuchBeanDefinitionException) {
+            null
+        }
     }
 
     companion object {
-        lateinit var authenticationContext: AuthenticationContext
+        var authenticationContext: AuthenticationContext? = null
     }
 }
 
@@ -59,11 +63,12 @@ fun (@VaadinDsl SideNav).securedRoute(
     title: String = getRouteTitle(routeClass),
     block: (@VaadinDsl SideNavItem).() -> Unit = {}
 ): SideNavItem? {
-    if (routeClass.java.isAnnotationPresent(AnonymousAllowed::class.java)
-        || (SideNavUtils.authenticationContext.isAuthenticated && (
+    if (SideNavUtils.authenticationContext == null
+        || routeClass.java.isAnnotationPresent(AnonymousAllowed::class.java)
+        || (SideNavUtils.authenticationContext!!.isAuthenticated && (
                 routeClass.java.isAnnotationPresent(PermitAll::class.java)
                         || (routeClass.java.isAnnotationPresent(RolesAllowed::class.java) &&
-                        SideNavUtils.authenticationContext.hasAnyRole(*routeClass.java.getAnnotation(RolesAllowed::class.java).value.map {
+                        SideNavUtils.authenticationContext!!.hasAnyRole(*routeClass.java.getAnnotation(RolesAllowed::class.java).value.map {
                             it.removePrefix(
                                 "ROLE_"
                             )
@@ -83,10 +88,10 @@ fun (@VaadinDsl SideNavItem).securedRoute(
     block: (@VaadinDsl SideNavItem).() -> Unit = {}
 ): SideNavItem? {
     if (routeClass.java.isAnnotationPresent(AnonymousAllowed::class.java)
-        || (SideNavUtils.authenticationContext.isAuthenticated && (
+        || (SideNavUtils.authenticationContext!!.isAuthenticated && (
                 routeClass.java.isAnnotationPresent(PermitAll::class.java)
                         || (routeClass.java.isAnnotationPresent(RolesAllowed::class.java) &&
-                        SideNavUtils.authenticationContext.hasAnyRole(*routeClass.java.getAnnotation(RolesAllowed::class.java).value.map {
+                        SideNavUtils.authenticationContext!!.hasAnyRole(*routeClass.java.getAnnotation(RolesAllowed::class.java).value.map {
                             it.removePrefix(
                                 "ROLE_"
                             )

@@ -31,7 +31,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public class MainLayout extends AppLayout {
     private final transient AuthenticationContext authenticationContext;
 
-    public MainLayout(AuthenticationContext authenticationContext,
+    public MainLayout(@Autowired(required = false) AuthenticationContext authenticationContext,
                       @Autowired(required = false) @Qualifier("navigation") Component navigation) {
 
         this.authenticationContext = authenticationContext;
@@ -40,7 +40,7 @@ public class MainLayout extends AppLayout {
         logo.addClassNames(LumoUtility.FontSize.LARGE, LumoUtility.Margin.Vertical.AUTO, LumoUtility.Margin.Left.SMALL);
         final HorizontalLayout header = new HorizontalLayout();
 
-        if (authenticationContext.isAuthenticated()) {
+        if (authenticationContext != null && authenticationContext.isAuthenticated()) {
             Span spacer = new Span();
             spacer.addClassNames(LumoUtility.Margin.Left.AUTO);
             Span loggedAs = new Span(getTranslation("ionspring.layout.loggedInAs",
