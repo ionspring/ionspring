@@ -22,4 +22,6 @@ dependencies {
     api(project(":ionspring-as400-autoconfigure"))
     api(project(":ionspring-vaadin-autoconfigure"))
     api("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
+    api("com.github.mvysny.karibudsl:karibu-dsl:${project.extra["karibuVersion"]}")
+    api("com.github.mvysny.karibudsl:karibu-dsl-v23:${project.extra["karibuVersion"]}")
 }

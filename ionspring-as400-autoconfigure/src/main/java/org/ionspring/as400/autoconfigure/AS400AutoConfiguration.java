@@ -27,9 +27,16 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertiesPropertySource;
+import org.springframework.core.env.PropertySource;
+import org.springframework.core.env.PropertySources;
 import org.springframework.security.authentication.AuthenticationProvider;
 
 import javax.sql.DataSource;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @AutoConfiguration
 @ConditionalOnClass(AS400.class)
@@ -68,7 +75,12 @@ public class AS400AutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnBean(AS400.class)
     public DataSource as400JDBCDataSource(IonSpringProperties properties,
+                                          ConfigurableEnvironment configurableEnvironment,
                                           AS400 as400) {
+        final Properties props = new Properties();
+        props.put("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.DB2iDialect");
+        configurableEnvironment.getPropertySources().addLast(new PropertiesPropertySource("ionspring", props));
+
         return new AS400JDBCDataSource(as400);
     }
 
