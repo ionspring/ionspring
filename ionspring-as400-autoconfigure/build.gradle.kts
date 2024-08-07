@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-autoconfigure:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-starter-security:${project.extra["springBootVersion"]}")

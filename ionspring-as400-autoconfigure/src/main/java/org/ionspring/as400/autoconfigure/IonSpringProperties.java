@@ -21,16 +21,28 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("ionspring")
 public class IonSpringProperties {
 
-    private As400Properties as400 = new As400Properties();
+    private final As400Properties as400 = new As400Properties();
 
     public As400Properties getAs400() {
         return as400;
     }
 
     public static class As400Properties {
+        /**
+         * IBM i dns name or IP address
+         */
         private String system = "localhost";
+        /**
+         * IBM i user name
+         */
         private String user = "*CURRENT";
+        /**
+         * IBM i user password
+         */
         private String password = "*CURRENT";
+        /**
+         * User SSL connection to IBM i
+         */
         private boolean secured = false;
 
         public String getSystem() {
