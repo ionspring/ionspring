@@ -82,7 +82,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      * @param username The username as entered by the user (mixed case)
      * @return <code>true</code> if user should be authenticated, <code>false</code> otherwize
      */
-    public boolean isAuthorized(@NonNull String username) {
+    public boolean isAuthorized(@SuppressWarnings("unused") @NonNull String username) {
         return true;
     }
 

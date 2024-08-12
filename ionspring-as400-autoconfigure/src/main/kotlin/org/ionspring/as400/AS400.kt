@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+@file:Suppress("unused")
+
 package org.ionspring.kotlin
 
 import com.ibm.as400.access.AS400

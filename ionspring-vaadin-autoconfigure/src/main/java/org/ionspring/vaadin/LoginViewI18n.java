@@ -28,13 +28,8 @@ import java.util.Optional;
 public class LoginViewI18n extends LoginI18n {
     private final I18NProvider i18NProvider;
 
-    public static String getTranslation(String key, Object... params) {
-        final Optional<I18NProvider> i18NProvider = LocaleUtil
-                .getI18NProvider();
-        return i18NProvider
-                .map(i18n -> i18n.getTranslation(key,
-                        LocaleUtil.getLocale(() -> i18NProvider), params))
-                .orElseGet(() -> "!{" + key + "}!");
+    public String getTranslation(String key, Object... params) {
+        return i18NProvider.getTranslation(key, LocaleUtil.getLocale(() -> Optional.of(i18NProvider)), params);
     }
 
     public LoginViewI18n(I18NProvider i18NProvider) {
@@ -44,7 +39,7 @@ public class LoginViewI18n extends LoginI18n {
         setErrorMessage(new ErrorMessageI18n());
     }
 
-    public static class HeaderI18n extends Header {
+    public class HeaderI18n extends Header {
         @Override
         public String getTitle() {
             return getTranslation("ionspring.login.header.title");
@@ -56,7 +51,7 @@ public class LoginViewI18n extends LoginI18n {
         }
     }
 
-    public static class FormI18n extends Form {
+    public class FormI18n extends Form {
         @Override
         public String getTitle() {
             return getTranslation("ionspring.login.form.title");
@@ -83,7 +78,7 @@ public class LoginViewI18n extends LoginI18n {
         }
     }
 
-    public static class ErrorMessageI18n extends ErrorMessage {
+    public class ErrorMessageI18n extends ErrorMessage {
         @Override
         public String getTitle() {
             return getTranslation("ionspring.login.errorMessage.title");

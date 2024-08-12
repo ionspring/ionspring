@@ -36,8 +36,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
  *     <li>A toggleable navigation drawer, if a bean named "navigation" exists</li>
  * </ul></p>
  */
+@SuppressWarnings("unused")
 public class MainLayout extends AppLayout {
-    private final transient AuthenticationContext authenticationContext;
+    protected final transient AuthenticationContext authenticationContext;
 
     public MainLayout(@Autowired(required = false) AuthenticationContext authenticationContext,
                       @Autowired(required = false) @Qualifier("navigation") Component navigation) {
@@ -51,7 +52,7 @@ public class MainLayout extends AppLayout {
         if (authenticationContext != null && authenticationContext.isAuthenticated()) {
             Span spacer = new Span();
             spacer.addClassNames(LumoUtility.Margin.Left.AUTO);
-            Span loggedAs = new Span(getTranslation("ionspring.layout.loggedInAs",
+            @SuppressWarnings("OptionalGetWithoutIsPresent") Span loggedAs = new Span(getTranslation("ionspring.layout.loggedInAs",
                     authenticationContext.getPrincipalName().get()));
             loggedAs.addClassNames(LumoUtility.FontSize.MEDIUM, LumoUtility.Margin.Vertical.AUTO,
                     LumoUtility.Display.HIDDEN, LumoUtility.Display.Breakpoint.Medium.FLEX);

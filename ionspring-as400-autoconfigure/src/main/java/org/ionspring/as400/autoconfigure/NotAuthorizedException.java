@@ -22,6 +22,7 @@ import org.springframework.security.core.AuthenticationException;
 /**
  * Exception thrown when the IBM i user/password matches but the authentication was denied by {@link AS400AuthenticationProvider#isAuthorized(String)}.
  */
+@SuppressWarnings("unused")
 public class NotAuthorizedException extends AuthenticationException {
     public NotAuthorizedException(String msg, Throwable cause) {
         super(msg, cause);

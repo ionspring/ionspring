@@ -129,7 +129,7 @@ fun (@VaadinDsl SideNavItem).securedRoute(
  * @return The created SideNavItem, <code>null</code> if the SideNavItem was empty.
  */
 @VaadinDsl
-public fun (@VaadinDsl SideNav).itemUnlessEmpty(
+fun (@VaadinDsl SideNav).itemUnlessEmpty(
     title: String,
     path: String? = null,
     block: (@VaadinDsl SideNavItem).() -> Unit = {}
@@ -152,7 +152,7 @@ public fun (@VaadinDsl SideNav).itemUnlessEmpty(
  * @return The created SideNavItem, <code>null</code> if the SideNavItem was empty.
  */
 @VaadinDsl
-public fun (@VaadinDsl SideNavItem).itemUnlessEmpty(
+fun (@VaadinDsl SideNavItem).itemUnlessEmpty(
     title: String,
     path: String? = null,
     block: (@VaadinDsl SideNavItem).() -> Unit = {}
