@@ -158,7 +158,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      * @param specialAuthorities The granted authorities corresponding to the user special authorities.
      * @return The list of <code>GrantedAuthority</code>.
      */
-    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@NonNull String username, List<GrantedAuthority> specialAuthorities) {
+    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@SuppressWarnings("unused") @NonNull String username, List<GrantedAuthority> specialAuthorities) {
         if(specialAuthorities == null) {
             return new ArrayList<>();
         }
