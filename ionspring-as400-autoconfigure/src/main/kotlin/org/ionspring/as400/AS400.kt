@@ -19,4 +19,8 @@ package org.ionspring.kotlin
 import com.ibm.as400.access.AS400
 import com.ibm.as400.access.SystemValue
 
+/**
+ * Creates a <code>SystemValue</code> object for the given system value.
+ * @param name The system value name
+ */
 fun AS400.systemValue(name: String): SystemValue = SystemValue(this, name.uppercase())

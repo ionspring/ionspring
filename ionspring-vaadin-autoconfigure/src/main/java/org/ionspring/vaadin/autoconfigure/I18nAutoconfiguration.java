@@ -27,6 +27,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
+/**
+ * Autoconfiguration for internationalization.
+ */
 @AutoConfiguration(before = SpringBootAutoConfiguration.class)
 public class I18nAutoconfiguration {
 

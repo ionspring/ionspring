@@ -23,6 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * A Vaadin I18NProvider implementation based on Spring <code>MessageSource</code>.
+ */
 public class SpringI18nProvider implements I18NProvider {
     private final MessageSource messageSource;
 

@@ -22,6 +22,9 @@ import com.vaadin.flow.internal.LocaleUtil;
 
 import java.util.Optional;
 
+/**
+ * Provides translations for the login view based on Vaadin internationalization facility.
+ */
 public class LoginViewI18n extends LoginI18n {
     private final I18NProvider i18NProvider;
 

@@ -30,9 +30,7 @@ import jakarta.annotation.security.RolesAllowed
 import org.springframework.beans.factory.NoSuchBeanDefinitionException
 import org.springframework.context.ApplicationListener
 import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.Lazy
 import org.springframework.context.event.ContextRefreshedEvent
-import org.springframework.security.core.context.SecurityContextHolder
 import kotlin.reflect.KClass
 
 private fun getRouteTitle(routeClass: KClass<*>): String {
@@ -40,6 +38,9 @@ private fun getRouteTitle(routeClass: KClass<*>): String {
     return title?.value ?: routeClass.simpleName ?: ""
 }
 
+/**
+ * Spring <code>ApplicationListener</code> to get the <code>AuthenticationContext</code> needed by Kotlin extension functions.
+ */
 @Configuration
 open class SideNavUtils : ApplicationListener<ContextRefreshedEvent> {
 
@@ -56,6 +57,14 @@ open class SideNavUtils : ApplicationListener<ContextRefreshedEvent> {
     }
 }
 
+/**
+ * Creates a <code>SideNavItem</code> if the user is authorized to the view and adds it to the SideNav.
+ * @param routeClass The <code>KClass</code> of the view.
+ * @param icon The <code>VaadinIcon</code> for the route.
+ * @param title The title of the route.
+ * @param block The customization block for the SideNavItem
+ * @return The created SideNavItem, <code>null</code> if user is not authorized.
+ */
 @VaadinDsl
 fun (@VaadinDsl SideNav).securedRoute(
     routeClass: KClass<out Component>,
@@ -80,6 +89,14 @@ fun (@VaadinDsl SideNav).securedRoute(
     return null
 }
 
+/**
+ * Creates a <code>SideNavItem</code> if the user is authorized to the view and adds it to the SideNavItem.
+ * @param routeClass The <code>KClass</code> of the view.
+ * @param icon The <code>VaadinIcon</code> for the route.
+ * @param title The title of the route.
+ * @param block The customization block for the SideNavItem
+ * @return The created SideNavItem, <code>null</code> if user is not authorized.
+ */
 @VaadinDsl
 fun (@VaadinDsl SideNavItem).securedRoute(
     routeClass: KClass<out Component>,
@@ -103,6 +120,14 @@ fun (@VaadinDsl SideNavItem).securedRoute(
     return null
 }
 
+/**
+ * Create a <code>SideNavItem</code> that will be added to the SideNav only if it is not empty. The goal is to not have empty groups
+ * if the user is not authorized to any element in the group.
+ * @param title The title of the group.
+ * @param path The link path for the group.
+ * @param block The customization block for the SideNavItem. The block will always be called, if it does not add any child to the group, the group will not be added.
+ * @return The created SideNavItem, <code>null</code> if the SideNavItem was empty.
+ */
 @VaadinDsl
 public fun (@VaadinDsl SideNav).itemUnlessEmpty(
     title: String,
@@ -118,6 +143,14 @@ public fun (@VaadinDsl SideNav).itemUnlessEmpty(
     return null
 }
 
+/**
+ * Create a <code>SideNavItem</code> that will be added to the SideNavItem only if it is not empty. The goal is to not have empty groups
+ * if the user is not authorized to any element in the group.
+ * @param title The title of the group.
+ * @param path The link path for the group.
+ * @param block The customization block for the SideNavItem. The block will always be called, if it does not add any child to the group, the group will not be added.
+ * @return The created SideNavItem, <code>null</code> if the SideNavItem was empty.
+ */
 @VaadinDsl
 public fun (@VaadinDsl SideNavItem).itemUnlessEmpty(
     title: String,

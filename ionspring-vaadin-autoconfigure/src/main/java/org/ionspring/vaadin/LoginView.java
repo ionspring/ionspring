@@ -25,6 +25,11 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 
+/**
+ * Default login view.
+ * <p>Currently, the application developer must create a subclass in the application package or subpackage for Vaadin
+ * to be able to locate the view if the application is bundled as a jar file.</p>
+ */
 @Route("login")
 @PageTitle("Login")
 @AnonymousAllowed

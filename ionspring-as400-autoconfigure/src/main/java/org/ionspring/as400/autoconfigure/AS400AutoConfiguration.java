@@ -38,6 +38,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * AS400 and related bean autoconfiguration.
+ */
 @AutoConfiguration
 @ConditionalOnClass(AS400.class)
 @EnableConfigurationProperties(IonSpringProperties.class)

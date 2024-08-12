@@ -19,6 +19,7 @@ package org.ionspring.as400.autoconfigure;
 import com.ibm.as400.access.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,8 +33,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A Spring Security authentication provider that performs authentication against IBM i user profiles.
+ * <p>This implementation will authenticate any enabled user profile that has a password.</p>
+ * <p>Granted authorities are based on the user special authorities (see {@link #getGrantedAuthorities}).</p>
+ * <p>To customize authentication and authorization, this class can be subclassed and exposed as an <code>AuthenticationProvider</code> bean.</p>
+ * <p>To customize authentication (i.e. select which user profiles are allowed), override {@link #isAuthorized(String)}.</p>
+ * <p>To customize authorization, override {@link #getGrantedAuthorities(String, List)}.</p>
+ */
 public class AS400AuthenticationProvider implements AuthenticationProvider {
-    private final AS400 as400;
+    protected final AS400 as400;
 
     Logger logger = LoggerFactory.getLogger(AS400AuthenticationProvider.class);
 
@@ -41,6 +50,13 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
         this.as400 = as400;
     }
 
+    /**
+     * Performs authentication against IBM i user profiles.
+     *
+     * @param authentication the authentication request object.
+     * @return the UsernamePasswordAuthenticationToken object if authentication is successful.
+     * @throws AuthenticationException if authentication isn't successful.
+     */
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         try {
@@ -59,10 +75,39 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
                                 authentication.getCredentials().toString().toCharArray())));
     }
 
-    public boolean isAuthorized(String username) {
+    /**
+     * Used to restrict which users are allowed to access the application. Called after user/password check is successful.
+     * <p>This method should be overridden to customize authentication.</p>
+     * <p>The default implementation always returns <code>true</code>, allowing all enabled user profiles with a password.</p>
+     * @param username The username as entered by the user (mixed case)
+     * @return <code>true</code> if user should be authenticated, <code>false</code> otherwize
+     */
+    public boolean isAuthorized(@NonNull String username) {
         return true;
     }
 
+    /**
+     * Returns a list of <code>GrantedAuthority</code> for the authenticated user. Since the user profile used at the application level
+     * might (and probably shouldn't) have *READ authority on the authenticating user profile, a connexion to the IBM i under that
+     * user profile is done to get the special authorities the user has.
+     * <p>The following granted authorities are created based on the corresponding special authorities:
+     * <ul>
+     *     <li>ROLE_SPECIAL_AUTHORITY_AUDIT</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_SERVICE</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_ALL_OBJECT</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_IO_SYSTEM_CONFIGURATION</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_JOB_CONTROL</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_SAVE_SYSTEM</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_SECURITY_ADMINISTRATOR</li>
+     *     <li>ROLE_SPECIAL_AUTHORITY_SPOOL_CONTROL</li>
+     * </ul></p>
+     * <p>If {@link #getGrantedAuthorities(String, List)} is overridden and doesn't use its second parameter, this method can be overiridden
+     * to return null in order to avoid the unnecessary connection to get special authorities.</p>
+     *
+     * @param username The username entered by the user
+     * @param password The password entered by the user
+     * @return The list of granted authorities based on the user special authorities.
+     */
     public List<GrantedAuthority> getSpecialAuthorities(String username, char[] password) {
         List<GrantedAuthority> retVal = new ArrayList<>();
         AS400 userAs400;
@@ -104,10 +149,28 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
         return retVal;
     }
 
-    public List<GrantedAuthority> getGrantedAuthorities(String username, List<GrantedAuthority> specialAuthorities) {
+    /**
+     * Returns a list of <code>GrantedAuthoritiy</code> for the authenticated used.
+     * <p>This method should be overridden to customize user authorization.</p>
+     * <p>The default implementation returns the authenticating user special authorities.</p>
+     *
+     * @param username The username entered by the user
+     * @param specialAuthorities The granted authorities corresponding to the user special authorities.
+     * @return The list of <code>GrantedAuthority</code>.
+     */
+    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@NonNull String username, List<GrantedAuthority> specialAuthorities) {
+        if(specialAuthorities == null) {
+            return new ArrayList<>();
+        }
         return specialAuthorities;
     }
 
+    /**
+     * Returns <code>true</code> if authentication is user/password authentication, <code>false</code> otherwise.
+     *
+     * @param authentication The <code>Authentication</code> object class.
+     * @return <code>true</code> if authentication class is <code>UsernamePasswordAuthenticationToken</code>
+     */
     @Override
     public boolean supports(Class<?> authentication) {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
