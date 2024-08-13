@@ -90,7 +90,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      * Returns a list of <code>GrantedAuthority</code> for the authenticated user. Since the user profile used at the application level
      * might (and probably shouldn't) have *READ authority on the authenticating user profile, a connexion to the IBM i under that
      * user profile is done to get the special authorities the user has.
-     * <p>The following granted authorities are created based on the corresponding special authorities:
+     * <p>The following granted authorities are created based on the corresponding special authorities:</p>
      * <ul>
      *     <li>ROLE_SPECIAL_AUTHORITY_AUDIT</li>
      *     <li>ROLE_SPECIAL_AUTHORITY_SERVICE</li>
@@ -100,7 +100,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      *     <li>ROLE_SPECIAL_AUTHORITY_SAVE_SYSTEM</li>
      *     <li>ROLE_SPECIAL_AUTHORITY_SECURITY_ADMINISTRATOR</li>
      *     <li>ROLE_SPECIAL_AUTHORITY_SPOOL_CONTROL</li>
-     * </ul></p>
+     * </ul>
      * <p>If {@link #getGrantedAuthorities(String, List)} is overridden and doesn't use its second parameter, this method can be overiridden
      * to return null in order to avoid the unnecessary connection to get special authorities.</p>
      *

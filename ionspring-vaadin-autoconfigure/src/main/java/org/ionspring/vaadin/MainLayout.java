@@ -30,11 +30,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 /**
  * A Vaadin layout for use by the application, based on <code>AppLayout</code>.
- * <p>Provides the following:
+ * <p>Provides the following:</p>
  * <ul>
  *     <li>A header bar containing the title and, if the user is authenticated, the user name and a logout button</li>
  *     <li>A toggleable navigation drawer, if a bean named "navigation" exists</li>
- * </ul></p>
+ * </ul>
  */
 @SuppressWarnings("unused")
 public class MainLayout extends AppLayout {
