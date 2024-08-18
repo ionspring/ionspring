@@ -74,12 +74,15 @@ public class AS400AutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnBean(AS400.class)
     public DataSource as400JDBCDataSource(ConfigurableEnvironment configurableEnvironment,
+                                          IonSpringProperties ionSpringProperties,
                                           AS400 as400) {
         final Properties props = new Properties();
         props.put("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.DB2iDialect");
         configurableEnvironment.getPropertySources().addLast(new PropertiesPropertySource("ionspring", props));
 
-        return new AS400JDBCDataSource(as400);
+        final AS400JDBCDataSource ds = new AS400JDBCDataSource(as400);
+        ds.setLibraries(ionSpringProperties.getAs400().getLibraries());
+        return ds;
     }
 
     @ConditionalOnClass(AuthenticationProvider.class)

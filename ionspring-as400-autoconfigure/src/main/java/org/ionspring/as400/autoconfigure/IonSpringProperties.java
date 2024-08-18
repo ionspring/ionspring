@@ -45,6 +45,11 @@ public class IonSpringProperties {
          */
         private boolean secured = false;
 
+        /**
+         * Library list
+         */
+        private String libraries = "*LIBL";
+
         public String getSystem() {
             return system;
         }
@@ -75,6 +80,14 @@ public class IonSpringProperties {
 
         public void setSecured(boolean secured) {
             this.secured = secured;
+        }
+
+        public String getLibraries() {
+            return libraries;
+        }
+
+        public void setLibraries(String libraries) {
+            this.libraries = libraries;
         }
     }
 }
