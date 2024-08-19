@@ -17,7 +17,40 @@
 package org.ionspring.vaadin
 
 import com.vaadin.flow.component.UI
+import com.vaadin.flow.data.binder.Binder
+import com.vaadin.flow.data.validator.*
+import com.vaadin.flow.i18n.I18NProvider
+import org.springframework.beans.factory.NoSuchBeanDefinitionException
+import org.springframework.context.ApplicationListener
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.event.ContextRefreshedEvent
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.text.NumberFormat
+
+
+/**
+ * Spring <code>ApplicationListener</code> to get the <code>I18NProvider</code> needed by Kotlin extension functions.
+ */
+@Configuration
+open class I18nUtils : ApplicationListener<ContextRefreshedEvent> {
+
+    override fun onApplicationEvent(event: ContextRefreshedEvent) {
+        i18nProvider = try {
+            event.applicationContext.getBean(I18NProvider::class.java) as I18NProvider
+        } catch (_: NoSuchBeanDefinitionException) {
+            null
+        }
+    }
+
+
+    companion object {
+        var i18nProvider: I18NProvider? = null
+
+        fun getTranslation(key: String, override: String?, fallBack: String, vararg params: Any) =
+            override ?: i18nProvider?.getTranslation(key, UI.getCurrent().locale, *params) ?: fallBack
+    }
+}
 
 /**
  * Formats a number according to the current user locale.
@@ -42,3 +75,99 @@ fun Number.format(minDecimals: Int? = null, maxDecimals: Int? = null): String {
     }
     return decimalFormat.format(this)
 }
+
+/**
+ * Adds a range validator.
+ * @param range
+ */
+public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
+    range: ClosedRange<Float>,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, Float?> =
+    withValidator(
+        FloatRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ),
+            range.start,
+            range.endInclusive
+        )
+    )
+
+
+@JvmName("validateIntInRange")
+public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
+    range: IntRange,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, Int?> =
+    withValidator(
+        IntegerRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ), range.start, range.endInclusive
+        )
+    )
+
+@JvmName("validateLongInRange")
+public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
+    range: LongRange,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, Long?> =
+    withValidator(
+        LongRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ), range.start, range.endInclusive
+        )
+    )
+
+@JvmName("validateDoubleInRange")
+public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
+    range: ClosedRange<Double>,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, Double?> =
+    withValidator(
+        DoubleRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ), range.start, range.endInclusive
+        )
+    )
+
+@JvmName("validateBigIntegerInRange")
+public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
+    range: ClosedRange<BigInteger>,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, BigInteger?> =
+    withValidator(
+        BigIntegerRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ), range.start, range.endInclusive
+        )
+    )
+
+@JvmName("validateBigDecimalInRange")
+public fun <BEAN> Binder.BindingBuilder<BEAN, BigDecimal?>.validateInRange(
+    range: ClosedRange<BigDecimal>,
+    errorMessage: String? = null
+): Binder.BindingBuilder<BEAN, BigDecimal?> =
+    withValidator(
+        BigDecimalRangeValidator(
+            errorMessage ?: I18nUtils.getTranslation(
+                "ionspring.validateInRange.errorMessage",
+                errorMessage,
+                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+            ), range.start, range.endInclusive
+        )
+    )
