@@ -16,6 +16,8 @@
 
 package org.ionspring.vaadin.autoconfigure;
 
+import com.vaadin.flow.component.UI;
+import org.ionspring.vaadin.I18nUtils;
 import org.ionspring.vaadin.SideNavUtils;
 import kotlin.KotlinVersion;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -30,5 +32,11 @@ public class KotlinAutoconfiguration {
 
     @ConditionalOnClass(KotlinVersion.class)
     @Import(SideNavUtils.class)
-    public static class DummyClass {}
+    public static class DummyClass {
+    }
+
+    @ConditionalOnClass({KotlinVersion.class, UI.class})
+    @Import(I18nUtils.class)
+    public static class DummyClass2 {
+    }
 }

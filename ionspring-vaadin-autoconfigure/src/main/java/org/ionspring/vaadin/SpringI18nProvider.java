@@ -18,6 +18,7 @@ package org.ionspring.vaadin;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.context.MessageSource;
+import org.springframework.context.support.AbstractMessageSource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -40,6 +41,6 @@ public class SpringI18nProvider implements I18NProvider {
 
     @Override
     public String getTranslation(String key, Locale locale, Object... params) {
-        return messageSource.getMessage(key, params, locale);
+        return messageSource.getMessage(key, params, locale).formatted(params);
     }
 }

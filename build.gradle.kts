@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2024 Damien Ferrand
  *
@@ -21,7 +20,7 @@ plugins {
     `maven-publish`
     signing
     idea
-    id("tech.yanand.maven-central-publish") version("1.1.1")
+    id("tech.yanand.maven-central-publish") version ("1.1.1")
 }
 
 group = "org.ionspring"
@@ -106,7 +105,9 @@ subprojects {
         }
     }
     signing {
-        sign(publishing.publications["mavenJava"])
+        if (!project.version.toString().endsWith("-SNAPSHOT")) {
+            sign(publishing.publications["mavenJava"])
+        }
     }
     mavenCentral {
         repoDir = layout.buildDirectory.dir("staging-deploy")

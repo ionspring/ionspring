@@ -89,7 +89,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
             errorMessage ?: I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.start, range.endInclusive
             ),
             range.start,
             range.endInclusive
@@ -107,8 +107,8 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
             errorMessage ?: I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
-            ), range.start, range.endInclusive
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.first, range.last
+            ), range.first, range.last
         )
     )
 
@@ -122,8 +122,8 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
             errorMessage ?: I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
-            ), range.start, range.endInclusive
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.first, range.last
+            ), range.first, range.last
         )
     )
 
@@ -137,7 +137,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
             errorMessage ?: I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.start, range.endInclusive
             ), range.start, range.endInclusive
         )
     )
@@ -152,7 +152,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
             errorMessage ?: I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.start, range.endInclusive
             ), range.start, range.endInclusive
         )
     )
@@ -164,10 +164,10 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, BigDecimal?>.validateInRange(
 ): Binder.BindingBuilder<BEAN, BigDecimal?> =
     withValidator(
         BigDecimalRangeValidator(
-            errorMessage ?: I18nUtils.getTranslation(
+            I18nUtils.getTranslation(
                 "ionspring.validateInRange.errorMessage",
                 errorMessage,
-                "must be in ${range.start.format()}..${range.endInclusive.format()}"
+                "must be in ${range.start.format()}..${range.endInclusive.format()}", range.start, range.endInclusive
             ), range.start, range.endInclusive
         )
     )
