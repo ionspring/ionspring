@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 /*
  * Copyright 2024 Damien Ferrand
  *
@@ -21,6 +24,12 @@ plugins {
 
 repositories {
 	mavenCentral()
+}
+
+tasks.withType<KotlinCompile> {
+	compilerOptions {
+		jvmTarget = JvmTarget.JVM_17
+	}
 }
 
 dependencies {
