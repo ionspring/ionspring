@@ -41,6 +41,6 @@ public class SpringI18nProvider implements I18NProvider {
 
     @Override
     public String getTranslation(String key, Locale locale, Object... params) {
-        return messageSource.getMessage(key, params, locale).formatted(params);
+        return messageSource.getMessage(key, params, locale);
     }
 }
