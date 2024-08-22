@@ -81,7 +81,7 @@ fun Number.format(minDecimals: Int? = null, maxDecimals: Int? = null): String {
  * @param range the <code>ClosedRange</code> of authorized values
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
-public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
     range: ClosedRange<Float>,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, Float?> =
@@ -104,7 +104,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 @JvmName("validateIntInRange")
-public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
     range: IntRange,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, Int?> =
@@ -124,7 +124,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 @JvmName("validateLongInRange")
-public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
     range: LongRange,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, Long?> =
@@ -144,7 +144,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 @JvmName("validateDoubleInRange")
-public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
     range: ClosedRange<Double>,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, Double?> =
@@ -164,7 +164,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 @JvmName("validateBigIntegerInRange")
-public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
     range: ClosedRange<BigInteger>,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, BigInteger?> =
@@ -184,7 +184,7 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
  * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 @JvmName("validateBigDecimalInRange")
-public fun <BEAN> Binder.BindingBuilder<BEAN, BigDecimal?>.validateInRange(
+fun <BEAN> Binder.BindingBuilder<BEAN, BigDecimal?>.validateInRange(
     range: ClosedRange<BigDecimal>,
     errorMessage: String? = null
 ): Binder.BindingBuilder<BEAN, BigDecimal?> =

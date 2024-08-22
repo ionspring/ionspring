@@ -18,7 +18,6 @@ package org.ionspring.vaadin;
 
 import com.vaadin.flow.i18n.I18NProvider;
 import org.springframework.context.MessageSource;
-import org.springframework.context.support.AbstractMessageSource;
 
 import java.util.Arrays;
 import java.util.List;
