@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package org.ionspring.as400.autoconfigure;
+package org.ionspring.as400;
 
 import com.ibm.as400.access.*;
+import org.ionspring.as400.autoconfigure.NotAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
@@ -39,7 +40,7 @@ import java.util.List;
  * <p>Granted authorities are based on the user special authorities (see {@link #getGrantedAuthorities}).</p>
  * <p>To customize authentication and authorization, this class can be subclassed and exposed as an <code>AuthenticationProvider</code> bean.</p>
  * <p>To customize authentication (i.e. select which user profiles are allowed), override {@link #isAuthorized(String)}.</p>
- * <p>To customize authorization, override {@link #getGrantedAuthorities(String, List)}.</p>
+ * <p>To customize authorization, override {@link #getGrantedAuthorities(String, SpecialAuthorityLoader)}.</p>
  */
 public class AS400AuthenticationProvider implements AuthenticationProvider {
     protected final AS400 as400;
@@ -70,7 +71,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
             throw new NotAuthorizedException("User " + authentication.getPrincipal().toString() + " not authorized.");
         }
         return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(),
-                getGrantedAuthorities(authentication.getPrincipal().toString(),
+                getGrantedAuthorities(authentication.getPrincipal().toString(), () ->
                         getSpecialAuthorities(authentication.getPrincipal().toString(),
                                 authentication.getCredentials().toString().toCharArray())));
     }
@@ -79,6 +80,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      * Used to restrict which users are allowed to access the application. Called after user/password check is successful.
      * <p>This method should be overridden to customize authentication.</p>
      * <p>The default implementation always returns <code>true</code>, allowing all enabled user profiles with a password.</p>
+     *
      * @param username The username as entered by the user (mixed case)
      * @return <code>true</code> if user should be authenticated, <code>false</code> otherwize
      */
@@ -101,8 +103,6 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      *     <li>ROLE_SPECIAL_AUTHORITY_SECURITY_ADMINISTRATOR</li>
      *     <li>ROLE_SPECIAL_AUTHORITY_SPOOL_CONTROL</li>
      * </ul>
-     * <p>If {@link #getGrantedAuthorities(String, List)} is overridden and doesn't use its second parameter, this method can be overiridden
-     * to return null in order to avoid the unnecessary connection to get special authorities.</p>
      *
      * @param username The username entered by the user
      * @param password The password entered by the user
@@ -154,12 +154,13 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      * <p>This method should be overridden to customize user authorization.</p>
      * <p>The default implementation returns the authenticating user special authorities.</p>
      *
-     * @param username The username entered by the user
-     * @param specialAuthorities The granted authorities corresponding to the user special authorities.
+     * @param username               The username entered by the user
+     * @param specialAuthorityLoader The SpecialAuthorityLoader to get user profile special authorities.
      * @return The list of <code>GrantedAuthority</code>.
      */
-    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@SuppressWarnings("unused") @NonNull String username, List<GrantedAuthority> specialAuthorities) {
-        if(specialAuthorities == null) {
+    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@SuppressWarnings("unused") @NonNull String username, SpecialAuthorityLoader specialAuthorityLoader) {
+        final List<GrantedAuthority> specialAuthorities = specialAuthorityLoader.getSpecialAuthorities();
+        if (specialAuthorities == null) {
             return new ArrayList<>();
         }
         return specialAuthorities;

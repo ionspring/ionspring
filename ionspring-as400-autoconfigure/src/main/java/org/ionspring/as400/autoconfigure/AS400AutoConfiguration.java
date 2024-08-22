@@ -19,6 +19,7 @@ package org.ionspring.as400.autoconfigure;
 import com.ibm.as400.access.AS400;
 import com.ibm.as400.access.AS400JDBCDataSource;
 import com.ibm.as400.access.SecureAS400;
+import org.ionspring.as400.AS400AuthenticationProvider;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;

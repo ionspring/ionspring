@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 
-package org.ionspring.as400.autoconfigure;
+package org.ionspring.as400;
 
+import org.springframework.security.core.GrantedAuthority;
 
-import org.ionspring.as400.AS400AuthenticationProvider;
-import org.springframework.security.core.AuthenticationException;
+import java.util.List;
 
-/**
- * Exception thrown when the IBM i user/password matches but the authentication was denied by {@link AS400AuthenticationProvider#isAuthorized(String)}.
- */
-@SuppressWarnings("unused")
-public class NotAuthorizedException extends AuthenticationException {
-    public NotAuthorizedException(String msg, Throwable cause) {
-        super(msg, cause);
-    }
+public interface SpecialAuthorityLoader {
 
-    public NotAuthorizedException(String msg) {
-        super(msg);
-    }
+    List<GrantedAuthority> getSpecialAuthorities();
+
 }
