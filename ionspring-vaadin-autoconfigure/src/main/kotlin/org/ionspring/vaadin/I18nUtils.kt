@@ -78,7 +78,8 @@ fun Number.format(minDecimals: Int? = null, maxDecimals: Int? = null): String {
 
 /**
  * Adds a range validator.
- * @param range
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
  */
 public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
     range: ClosedRange<Float>,
@@ -97,6 +98,11 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Float?>.validateInRange(
     )
 
 
+/**
+ * Adds a range validator.
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
+ */
 @JvmName("validateIntInRange")
 public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
     range: IntRange,
@@ -112,6 +118,11 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Int?>.validateInRange(
         )
     )
 
+/**
+ * Adds a range validator.
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
+ */
 @JvmName("validateLongInRange")
 public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
     range: LongRange,
@@ -127,6 +138,11 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Long?>.validateInRange(
         )
     )
 
+/**
+ * Adds a range validator.
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
+ */
 @JvmName("validateDoubleInRange")
 public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
     range: ClosedRange<Double>,
@@ -142,6 +158,11 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, Double?>.validateInRange(
         )
     )
 
+/**
+ * Adds a range validator.
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
+ */
 @JvmName("validateBigIntegerInRange")
 public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
     range: ClosedRange<BigInteger>,
@@ -157,6 +178,11 @@ public fun <BEAN> Binder.BindingBuilder<BEAN, BigInteger?>.validateInRange(
         )
     )
 
+/**
+ * Adds a range validator.
+ * @param range the <code>ClosedRange</code> of authorized values
+ * @param errorMessage the error message to display. If <code>null</null> the default message will be used
+ */
 @JvmName("validateBigDecimalInRange")
 public fun <BEAN> Binder.BindingBuilder<BEAN, BigDecimal?>.validateInRange(
     range: ClosedRange<BigDecimal>,
