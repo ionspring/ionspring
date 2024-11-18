@@ -46,17 +46,13 @@ public class AS400AutoConfigurationTests {
     @Test
     void as400LocalhostSystemOnNonOS400ThrowsException() {
         System.setProperty("os.name", "LINUX");
-        assertThrows(BeanCreationException.class, () -> this.contextRunner.run((context) -> {
-            context.getBean(AS400.class);
-        }));
+        assertThrows(BeanCreationException.class, () -> this.contextRunner.run((context) -> context.getBean(AS400.class)));
     }
 
     @Test
     void as400CurrentUserOnNonOS400ThrowsException() {
         System.setProperty("os.name", "LINUX");
-        assertThrows(BeanCreationException.class, () -> this.contextRunner.withPropertyValues("ionspring.as400.system=as400").run((context) -> {
-            context.getBean(AS400.class);
-        }));
+        assertThrows(BeanCreationException.class, () -> this.contextRunner.withPropertyValues("ionspring.as400.system=as400").run((context) -> context.getBean(AS400.class)));
     }
 
     @Test
