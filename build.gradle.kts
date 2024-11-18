@@ -39,10 +39,10 @@ subprojects {
     apply(plugin = "signing")
     apply(plugin = "tech.yanand.maven-central-publish")
 
-    extra["springBootVersion"] = "3.3.2"
+    extra["springBootVersion"] = "3.3.5"
     extra["jt400Version"] = "20.0.7"
-    extra["vaadinVersion"] = "24.4.7"
-    extra["karibuVersion"] = "2.1.3"
+    extra["vaadinVersion"] = "24.5.4"
+    extra["karibuVersion"] = "2.1.4"
     extra["isReleaseVersion"] = false
 
     java.sourceCompatibility = JavaVersion.VERSION_17
