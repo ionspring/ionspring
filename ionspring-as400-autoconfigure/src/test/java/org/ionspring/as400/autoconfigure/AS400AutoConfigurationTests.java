@@ -17,15 +17,9 @@
 package org.ionspring.as400.autoconfigure;
 
 import com.ibm.as400.access.AS400;
-
-import static org.assertj.core.api.Assertions.*;
-
 import com.ibm.as400.access.AS400JDBCDataSource;
 import com.ibm.as400.access.SecureAS400;
 import org.junit.jupiter.api.AfterAll;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.boot.autoconfigure.AutoConfigurations;
@@ -33,6 +27,9 @@ import org.springframework.boot.test.context.FilteredClassLoader;
 import org.springframework.boot.test.context.runner.ApplicationContextRunner;
 
 import javax.sql.DataSource;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AS400AutoConfigurationTests {
 
@@ -49,47 +46,35 @@ public class AS400AutoConfigurationTests {
     @Test
     void as400LocalhostSystemOnNonOS400ThrowsException() {
         System.setProperty("os.name", "LINUX");
-        assertThrows(BeanCreationException.class, () -> {
-            this.contextRunner.run((context) -> {
-                context.getBean(AS400.class);
-            });
-        });
+        assertThrows(BeanCreationException.class, () -> this.contextRunner.run((context) -> {
+            context.getBean(AS400.class);
+        }));
     }
 
     @Test
     void as400CurrentUserOnNonOS400ThrowsException() {
         System.setProperty("os.name", "LINUX");
-        assertThrows(BeanCreationException.class, () -> {
-            this.contextRunner.withPropertyValues("ionspring.as400.system=as400").run((context) -> {
-                context.getBean(AS400.class);
-            });
-        });
+        assertThrows(BeanCreationException.class, () -> this.contextRunner.withPropertyValues("ionspring.as400.system=as400").run((context) -> {
+            context.getBean(AS400.class);
+        }));
     }
 
     @Test
     void as400CurrentPasswordOnNonOS400ThrowsException() {
         System.setProperty("os.name", "LINUX");
-        assertThrows(BeanCreationException.class, () -> {
-            this.contextRunner.withPropertyValues("ionspring.as400.system=as400", "ionspring.as400.user=user").run((context) -> {
-                context.getBean(AS400.class);
-            });
-        });
+        assertThrows(BeanCreationException.class, () -> this.contextRunner.withPropertyValues("ionspring.as400.system=as400", "ionspring.as400.user=user").run((context) -> context.getBean(AS400.class)));
     }
 
     @Test
     void as400NonDefaultOnNonOS400Works() {
         System.setProperty("os.name", "LINUX");
-        this.contextRunner.withPropertyValues("ionspring.as400.system=as400", "ionspring.as400.user=user", "ionspring.as400.password=password").run((context) -> {
-            assertThat(context).hasSingleBean(AS400.class);
-        });
+        this.contextRunner.withPropertyValues("ionspring.as400.system=as400", "ionspring.as400.user=user", "ionspring.as400.password=password").run((context) -> assertThat(context).hasSingleBean(AS400.class));
     }
 
     @Test
     void as400DefaultOnOS400Works() {
         System.setProperty("os.name", "OS/400");
-        this.contextRunner.run((context) -> {
-            assertThat(context).hasSingleBean(AS400.class);
-        });
+        this.contextRunner.run((context) -> assertThat(context).hasSingleBean(AS400.class));
     }
 
     @Test
@@ -103,33 +88,27 @@ public class AS400AutoConfigurationTests {
 
     @Test
     void noAs400BeanIfNoAS400Class() {
-        this.contextRunner.withClassLoader(new FilteredClassLoader(AS400.class)).run((context) -> {
-            assertThat(context).doesNotHaveBean(AS400.class);
-        });
+        this.contextRunner.withClassLoader(new FilteredClassLoader(AS400.class)).run((context) -> assertThat(context).doesNotHaveBean(AS400.class));
     }
 
     @Test
     void nonSecuredAS400() {
-        System.setProperty("os.name","OS/400");
-        this.contextRunner.run((context) -> {
-            assertThat(context).getBean(AS400.class).isNotInstanceOf(SecureAS400.class);
-        });
+        System.setProperty("os.name", "OS/400");
+        this.contextRunner.run((context) -> assertThat(context).getBean(AS400.class).isNotInstanceOf(SecureAS400.class));
     }
 
     @Test
     void securedAS400() {
-        System.setProperty("os.name","OS/400");
-        this.contextRunner.withPropertyValues("ionspring.as400.secured=true").run((context) -> {
-            assertThat(context).getBean(AS400.class).isInstanceOf(SecureAS400.class);
-        });
+        System.setProperty("os.name", "OS/400");
+        this.contextRunner.withPropertyValues("ionspring.as400.secured=true").run((context) -> assertThat(context).getBean(AS400.class).isInstanceOf(SecureAS400.class));
     }
 
     @Test
     void dataSource() {
-        System.setProperty("os.name","OS/400");
+        System.setProperty("os.name", "OS/400");
         this.contextRunner.run((context) -> {
-           assertThat(context).hasSingleBean(DataSource.class);
-           assertThat(context).getBean(DataSource.class).isInstanceOf(AS400JDBCDataSource.class);
+            assertThat(context).hasSingleBean(DataSource.class);
+            assertThat(context).getBean(DataSource.class).isInstanceOf(AS400JDBCDataSource.class);
         });
     }
 }

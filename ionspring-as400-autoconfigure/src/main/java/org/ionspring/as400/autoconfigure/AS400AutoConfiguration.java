@@ -25,14 +25,20 @@ import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.context.properties.bind.Bindable;
+import org.springframework.boot.context.properties.bind.Binder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.Environment;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.security.authentication.AuthenticationProvider;
 
 import javax.sql.DataSource;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Properties;
 
 /**
@@ -74,16 +80,33 @@ public class AS400AutoConfiguration {
     @Lazy
     @ConditionalOnMissingBean
     @ConditionalOnBean(AS400.class)
+    @ConfigurationProperties("ionspring.as400.datasource")
     public DataSource as400JDBCDataSource(ConfigurableEnvironment configurableEnvironment,
-                                          IonSpringProperties ionSpringProperties,
-                                          AS400 as400) {
+                                          AS400 as400,
+                                          Environment environment) {
+        // Hibernate dialect auto select is currently bugged with JTOpen driver and selects DB2Dialect instead of
+        // DB2iDialect. Therefore, we force DB2iDialect, you can ignore the warning in the log saying it's
+        // unnecessary.
         final Properties props = new Properties();
         props.put("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.DB2iDialect");
         configurableEnvironment.getPropertySources().addLast(new PropertiesPropertySource("ionspring", props));
 
         final AS400JDBCDataSource ds = new AS400JDBCDataSource(as400);
-        ds.setLibraries(ionSpringProperties.getAs400().getLibraries());
-        return ds;
+        Binder.get(environment).bindOrCreate("ionspring.as400.datasource", Bindable.ofInstance(ds));
+        // AS400JDBCDataSource does not pool connections, it creates a new one each time.
+        // If Hikari is found on the classpath, we wrap the AS400JDBCDataSource in a Hikari datasource
+        try {
+            final Class<?> configClass = Class.forName("com.zaxxer.hikari.HikariConfig");
+            final Object config = configClass.getDeclaredConstructor().newInstance();
+            final Method setDataSource = configClass.getDeclaredMethod("setDataSource", DataSource.class);
+            setDataSource.invoke(config, ds);
+            final Class<?> cpClass = Class.forName("com.zaxxer.hikari.HikariDataSource");
+            @SuppressWarnings("JavaReflectionInvocation") final Object cp = cpClass.getDeclaredConstructor(configClass).newInstance(config);
+            return (DataSource) cp;
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
+            return ds;
+        }
     }
 
     @ConditionalOnClass(AuthenticationProvider.class)

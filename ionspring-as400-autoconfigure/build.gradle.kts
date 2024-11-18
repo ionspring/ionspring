@@ -37,10 +37,12 @@ dependencies {
 	compileOnly("org.springframework.boot:spring-boot:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-autoconfigure:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-starter-security:${project.extra["springBootVersion"]}")
+	compileOnly("org.springframework.boot:spring-boot-starter-data-jpa:${project.extra["springBootVersion"]}")
 	compileOnly("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
 	compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
 	testImplementation("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:${project.extra["springBootVersion"]}")
+	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:${project.extra["springBootVersion"]}")
 }
 
 tasks.withType<Test> {
