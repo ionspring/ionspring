@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 plugins {
     java
     `maven-publish`
@@ -39,10 +38,10 @@ subprojects {
     apply(plugin = "signing")
     apply(plugin = "tech.yanand.maven-central-publish")
 
-    extra["springBootVersion"] = "3.3.5"
-    extra["jt400Version"] = "20.0.7"
-    extra["vaadinVersion"] = "24.5.4"
-    extra["karibuVersion"] = "2.1.4"
+    extra["springBootVersion"] = "3.4.3"
+    extra["jt400Version"] = "21.0.0"
+    extra["vaadinVersion"] = "24.6.6"
+    extra["karibuVersion"] = "2.3.2"
     extra["isReleaseVersion"] = false
 
     java.sourceCompatibility = JavaVersion.VERSION_17

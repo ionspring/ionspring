@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	id("java-library")
-	kotlin("jvm") version "1.9.24"
+	kotlin("jvm") version "2.1.0"
 }
 
 repositories {
@@ -39,7 +39,7 @@ dependencies {
 	compileOnly("org.springframework.boot:spring-boot-starter-security:${project.extra["springBootVersion"]}")
 	compileOnly("org.springframework.boot:spring-boot-starter-data-jpa:${project.extra["springBootVersion"]}")
 	compileOnly("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
-	compileOnly("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
+	compileOnly("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
 	testImplementation("net.sf.jt400:jt400:${project.extra["jt400Version"]}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test:${project.extra["springBootVersion"]}")
 	testImplementation("org.springframework.boot:spring-boot-starter-data-jpa:${project.extra["springBootVersion"]}")
