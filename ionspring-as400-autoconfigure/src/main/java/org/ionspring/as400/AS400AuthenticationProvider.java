@@ -18,6 +18,7 @@ package org.ionspring.as400;
 
 import com.ibm.as400.access.*;
 import org.ionspring.as400.autoconfigure.NotAuthorizedException;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.NonNull;
@@ -40,7 +41,7 @@ import java.util.List;
  * <p>Granted authorities are based on the user special authorities (see {@link #getGrantedAuthorities}).</p>
  * <p>To customize authentication and authorization, this class can be subclassed and exposed as an <code>AuthenticationProvider</code> bean.</p>
  * <p>To customize authentication (i.e. select which user profiles are allowed), override {@link #isAuthorized(String)}.</p>
- * <p>To customize authorization, override {@link #getGrantedAuthorities(String, SpecialAuthorityLoader)}.</p>
+ * <p>To customize authorization, override {@link #getGrantedAuthorities(String, char[], SpecialAuthorityLoader)}.</p>
  */
 public class AS400AuthenticationProvider implements AuthenticationProvider {
     protected final AS400 as400;
@@ -71,8 +72,8 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
             throw new NotAuthorizedException("User " + authentication.getPrincipal().toString() + " not authorized.");
         }
         return new UsernamePasswordAuthenticationToken(authentication.getPrincipal(), authentication.getCredentials(),
-                getGrantedAuthorities(authentication.getPrincipal().toString(), () ->
-                        getSpecialAuthorities(authentication.getPrincipal().toString(),
+                getGrantedAuthorities(authentication.getPrincipal().toString(), authentication.getCredentials().toString().toCharArray(),
+                        () -> getSpecialAuthorities(authentication.getPrincipal().toString(),
                                 authentication.getCredentials().toString().toCharArray())));
     }
 
@@ -110,12 +111,7 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
      */
     public List<GrantedAuthority> getSpecialAuthorities(String username, char[] password) {
         List<GrantedAuthority> retVal = new ArrayList<>();
-        AS400 userAs400;
-        if (as400 instanceof SecureAS400) {
-            userAs400 = new SecureAS400(as400.getSystemName(), username, password);
-        } else {
-            userAs400 = new AS400(as400.getSystemName(), username, password);
-        }
+        AS400 userAs400 = getUserAs400(username, password);
         try (userAs400) {
             User user = new User(userAs400, username);
             if (user.hasSpecialAuthority(User.SPECIAL_AUTHORITY_AUDIT)) {
@@ -150,15 +146,36 @@ public class AS400AuthenticationProvider implements AuthenticationProvider {
     }
 
     /**
+     * Returns an <code>AS400</code> object authenticated with the given username and password
+     *
+     * @param username The username to authenticate with.
+     * @param password The passsword to authenticate with.
+     * @return The authenticated <code>AS400</code> object.
+     */
+    @NotNull
+    protected AS400 getUserAs400(String username, char[] password) {
+        AS400 userAs400;
+        if (as400 instanceof SecureAS400) {
+            userAs400 = new SecureAS400(as400.getSystemName(), username, password);
+        } else {
+            userAs400 = new AS400(as400.getSystemName(), username, password);
+        }
+        return userAs400;
+    }
+
+    /**
      * Returns a list of <code>GrantedAuthoritiy</code> for the authenticated used.
      * <p>This method should be overridden to customize user authorization.</p>
      * <p>The default implementation returns the authenticating user special authorities.</p>
      *
      * @param username               The username entered by the user
+     * @param password               The password entered by the user
      * @param specialAuthorityLoader The SpecialAuthorityLoader to get user profile special authorities.
      * @return The list of <code>GrantedAuthority</code>.
      */
-    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@SuppressWarnings("unused") @NonNull String username, SpecialAuthorityLoader specialAuthorityLoader) {
+    public @NonNull List<GrantedAuthority> getGrantedAuthorities(@SuppressWarnings("unused") @NonNull String username,
+                                                                 @SuppressWarnings("unused") @NonNull char[] password,
+                                                                 SpecialAuthorityLoader specialAuthorityLoader) {
         final List<GrantedAuthority> specialAuthorities = specialAuthorityLoader.getSpecialAuthorities();
         if (specialAuthorities == null) {
             return new ArrayList<>();

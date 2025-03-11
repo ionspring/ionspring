@@ -23,6 +23,7 @@ import com.vaadin.flow.component.icon.VaadinIcon
 import com.vaadin.flow.component.sidenav.SideNav
 import com.vaadin.flow.component.sidenav.SideNavItem
 import com.vaadin.flow.router.PageTitle
+import com.vaadin.flow.router.RouteParameters
 import com.vaadin.flow.server.auth.AnonymousAllowed
 import com.vaadin.flow.spring.security.AuthenticationContext
 import jakarta.annotation.security.PermitAll
@@ -84,7 +85,7 @@ fun (@VaadinDsl SideNav).securedRoute(
                         }.toTypedArray()))
                 ))
     ) {
-        return route(routeClass, icon, title, block)
+        return route(routeClass, icon, title, RouteParameters.empty(), block)
     }
     return null
 }
@@ -115,7 +116,7 @@ fun (@VaadinDsl SideNavItem).securedRoute(
                         }.toTypedArray()))
                 ))
     ) {
-        return route(routeClass, icon, title, block)
+        return route(routeClass, icon, title, RouteParameters.empty(), block)
     }
     return null
 }
