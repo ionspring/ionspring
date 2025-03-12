@@ -109,7 +109,6 @@ subprojects {
         }
     }
     mavenCentral {
-        repoDir = layout.buildDirectory.dir("staging-deploy")
         authToken = findProperty("mavenCentralToken") as String?
         publishingType = "USER_MANAGED"
     }
