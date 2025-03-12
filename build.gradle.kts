@@ -19,11 +19,11 @@ plugins {
     `maven-publish`
     signing
     idea
-    id("tech.yanand.maven-central-publish") version ("1.1.1")
+    id("tech.yanand.maven-central-publish") version ("1.3.0")
 }
 
 group = "org.ionspring"
-version = "0.1.1-SNAPSHOT"
+version = "0.1.1"
 
 idea {
     module {
@@ -42,7 +42,7 @@ subprojects {
     extra["jt400Version"] = "21.0.0"
     extra["vaadinVersion"] = "24.6.6"
     extra["karibuVersion"] = "2.3.2"
-    extra["isReleaseVersion"] = false
+    extra["isReleaseVersion"] = true
 
     java.sourceCompatibility = JavaVersion.VERSION_17
 
